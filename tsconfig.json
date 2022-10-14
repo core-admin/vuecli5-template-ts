@@ -1,0 +1,65 @@
+{
+  "compilerOptions": {
+    // ts被编译为的es版本 输出的内容我们将由babel来接管 不让ts直接编译成最终的产物
+    // 所以此处es版本可为最高
+    "target": "esnext",
+    // 模块化的规范
+    "module": "esnext",
+    // 使用 Node.js 风格解析模块
+    "moduleResolution": "node",
+    // 严格模式 在严格模式下未声明的类型的参数都必须添加any才不会报错
+    "strict": true,
+    // 不允许对同一个文件使用不一致格式的引用
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "strictFunctionTypes": false,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    // 允许编译 JavaScript 文件
+    "allowJs": true,
+    // 生成相应的.map文件
+    "sourceMap": true,
+    // 兼容esmodule与commonjs
+    "esModuleInterop": true,
+    // 允许导入json模块
+    "resolveJsonModule": true,
+    // 报告未使用的变量 使用tslint校验
+    "noUnusedLocals": false,
+    // 报告未使用的参数 使用tslint校验
+    "noUnusedParameters": false,
+    // 开启装饰器功能
+    "experimentalDecorators": true,
+    // 开启类的声明标志符 public xxx
+    "useDefineForClassFields": true,
+    // 不允许隐式的 any 类型
+    "noImplicitAny": true,
+    // 跳过库检查
+    "skipLibCheck": true,
+    // 移除注释
+    "removeComments": true,
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types/", "./types"],
+    "paths": {
+      "@/*": ["src/*"],
+      "#/*": ["types/*"]
+    },
+    // 指定项目中要使用的库
+    "lib": ["esnext", "dom", "dom.iterable"]
+  },
+  // 指定哪些文件需要被ts编译/检查
+  // ** 任意目录 * 任意文件
+  "include": [
+    "tests/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "types/**/*.d.ts",
+    "types/**/*.ts",
+    "build/**/*.ts",
+    "build/**/*.d.ts",
+    "mock/**/*.ts"
+  ],
+  // 不需要被检查的文件
+  "exclude": ["**/node_modules/**", "**/dist/**", "**/*.js"]
+}
