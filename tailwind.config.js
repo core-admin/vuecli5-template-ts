@@ -1,6 +1,10 @@
 /** @type {import("@types/tailwindcss/tailwind-config").TailwindConfig } */
 module.exports = {
-  content: ['./public/index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  content: [
+    './public/index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx}',
+    './application/**/*.{vue,js,ts,jsx,tsx}',
+  ],
   theme: {
     extend: {
       screens: {

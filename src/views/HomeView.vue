@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png" />
-    <a-button>哈哈</a-button>
+    <a-button @click="hnadleNavigator"> 跳转到移动端页面 </a-button>
   </div>
 </template>
 
@@ -10,5 +10,12 @@
 
   export default defineComponent({
     name: 'HomeView',
+    setup() {
+      return {
+        hnadleNavigator() {
+          window.location.href = location.origin + '/mobile';
+        },
+      };
+    },
   });
 </script>

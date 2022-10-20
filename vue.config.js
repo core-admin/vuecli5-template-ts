@@ -182,23 +182,31 @@ module.exports = defineConfig({
               reuseExistingChunk: true,
               enforce: true,
             },
-            // index: {
-            //   name: 'chunk-index',
-            //   chunks: 'all',
-            //   minChunks: 1,
-            //   test: /[\\/]node_modules[\\/](sortablejs|screenfull|nprogress|hotkeys-js|fuse\.js|better-scroll|lowdb|shortid)[\\/]/,
-            //   priority: 3,
-            //   reuseExistingChunk: true,
-            //   enforce: true,
-            // },
-            vue: {
-              name: 'chunk-vue',
+            lib: {
+              name: 'chunk-lib',
+              chunks: 'all',
+              minChunks: 1,
+              test: /[\\/]node_modules[\\/](axios|lodash-es|qs|dayjs|@ant-design\/colors)[\\/]/,
+              priority: 3,
+              reuseExistingChunk: true,
+              enforce: true,
+            },
+            awesomeVue: {
+              name: 'awesome-vue',
               test: /[\\/]node_modules[\\/](vue|vue-router|pinia|@vueuse\/core|@vue\/shared)[\\/]/,
               chunks: 'all',
               priority: 3,
               reuseExistingChunk: true,
               enforce: true,
             },
+            // awesomeVueComponent: {
+            //   name: 'awesome-vue-component',
+            //   test: /[\\/]node_modules[\\/](qrcodejs2-fix|v-contextmenu|vue-cropper)[\\/]/,
+            //   chunks: 'all',
+            //   priority: 3,
+            //   reuseExistingChunk: true,
+            //   enforce: true,
+            // },
             antv: {
               name: 'chunk-antv',
               test: /[\\/]node_modules[\\/]ant-design-vue[\\/]/,
@@ -214,4 +222,20 @@ module.exports = defineConfig({
     return config;
   },
   pluginOptions: {},
+  pages: {
+    index: {
+      entry: 'src/main',
+      template: 'public/index.html',
+      filename: 'index.html',
+      title: 'pc端',
+      chunks: ['index'],
+    },
+    mobile: {
+      entry: 'application/mobile/main',
+      template: 'application/mobile/index.html',
+      filename: 'mobile.html',
+      title: 'mobile端',
+      chunks: ['mobile'],
+    },
+  },
 });

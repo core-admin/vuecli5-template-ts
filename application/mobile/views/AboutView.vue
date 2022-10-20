@@ -1,7 +1,7 @@
 <template>
-  <div class="space-x-4 about">
-    About
-    <a-button @click="hnadleNavigator"> 跳转到移动端页面 </a-button>
+  <div>
+    <h2 class="text-xl">AboutView.Page</h2>
+    <button @click="hnadleNavigator"> 跳转到移动端页面 </button>
   </div>
 </template>
 
@@ -13,11 +13,9 @@
     setup() {
       return {
         hnadleNavigator() {
-          window.location.href = location.origin + '/mobile';
+          window.location.href = location.origin + '/about';
         },
       };
     },
   });
 </script>
-
-<style></style>
