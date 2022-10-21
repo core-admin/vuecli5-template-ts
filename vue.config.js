@@ -22,7 +22,7 @@ function previewBuild() {
 
 function openGzip() {
   const CompressionWebpackPlugin = require('compression-webpack-plugin');
-  const compress = new CompressionWebpackPlugin({
+  return new CompressionWebpackPlugin({
     // 此处为新版写法
     filename: '[path][base].gz',
     threshold: 10240,
@@ -30,7 +30,6 @@ function openGzip() {
     test: new RegExp('\\.(' + ['js', 'css'].join('|') + ')$'),
     deleteOriginalAssets: false,
   });
-  return compress;
 }
 
 function compressImage(config) {
@@ -222,20 +221,4 @@ module.exports = defineConfig({
     return config;
   },
   pluginOptions: {},
-  pages: {
-    index: {
-      entry: 'src/main',
-      template: 'public/index.html',
-      filename: 'index.html',
-      title: 'pc端',
-      chunks: ['index'],
-    },
-    mobile: {
-      entry: 'application/mobile/main',
-      template: 'application/mobile/index.html',
-      filename: 'mobile.html',
-      title: 'mobile端',
-      chunks: ['mobile'],
-    },
-  },
 });

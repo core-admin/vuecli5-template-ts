@@ -1,8 +1,5 @@
 <template>
-  <div class="space-x-4 about">
-    About
-    <a-button @click="hnadleNavigator"> 跳转到移动端页面 </a-button>
-  </div>
+  <div class="space-x-4 about"> About </div>
 </template>
 
 <script lang="ts">
@@ -11,11 +8,7 @@
   export default defineComponent({
     name: 'AboutView',
     setup() {
-      return {
-        hnadleNavigator() {
-          window.location.href = location.origin + '/mobile';
-        },
-      };
+      return {};
     },
   });
 </script>

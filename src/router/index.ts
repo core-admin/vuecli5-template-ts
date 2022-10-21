@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory(process.env.VUE_APP_PUBLIC_PATH),
   routes,
 });
 

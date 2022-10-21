@@ -1,9 +1,10 @@
 {
   "recommendations": [
-    "johnsoncodehk.volar",
+    "Vue.volar",
     "dbaeumer.vscode-eslint",
     "mikestead.dotenv",
     "bradlc.vscode-tailwindcss",
     "esbenp.prettier-vscode",
+    "mrmlnc.vscode-less"
   ]
 }
