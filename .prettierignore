@@ -1,7 +1,6 @@
 .local
 .output.js
 .husky
-.vscode
 .idea
 .npmrc
 jsconfig.json

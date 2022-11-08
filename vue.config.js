@@ -1,6 +1,7 @@
-const { defineConfig } = require('@vue/cli-service');
 const path = require('path');
+const { defineConfig } = require('@vue/cli-service');
 const { wrapperEnv, getAppEnvConfig, createProxy } = require('./build/env');
+// const sourceMapPlugin = require('./build/plugins/source-map');
 
 const env = getAppEnvConfig();
 const vueEnv = wrapperEnv(env);
@@ -46,6 +47,7 @@ function compressImage(config) {
     });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const handleSvgIcon = config => {
   config.module.rule('svg').exclude.add(resolve('src/assets/svg-icons')).end();
 
@@ -90,10 +92,11 @@ const handleSvgIcon = config => {
 };
 
 module.exports = defineConfig({
+  filenameHashing: false,
   publicPath: isProd ? process.env.VUE_APP_PUBLIC_PATH : '/',
   // node_modules里面的文件不会经过babel再编译一遍
   // 是否需要在打包兼容一遍
-  transpileDependencies: true,
+  transpileDependencies: false,
   // transpileDependencies: [],
   productionSourceMap: false,
   // 是否使用包含运行时编译器的 Vue 构建版本
@@ -104,7 +107,9 @@ module.exports = defineConfig({
     hot: false,
     proxy: createProxy(VUE_APP_PROXY),
   },
+  // https://github.com/vuejs/vue-cli/issues/3783
   css: {
+    // https://github.com/vuejs/vue-cli/issues/5989
     // 是否分离css true:分离css，会造成css无法热更新，false：会把css打包进js中，js一更新css自然更新
     extract: process.env.NODE_ENV !== 'development',
     sourceMap: false,
@@ -118,13 +123,13 @@ module.exports = defineConfig({
   },
   chainWebpack(config) {
     // 移除预加载与优先加载功能
-    config.plugins.delete('prefetch');
-    config.plugins.delete('preload');
+    // config.plugins.delete('prefetch');
+    // config.plugins.delete('preload');
 
-    // 修复HMR (热更新不起作用可开启)
-    config.resolve.symlinks(true);
+    // // 修复HMR (热更新不起作用可开启)
+    // config.resolve.symlinks(true);
 
-    handleSvgIcon(config);
+    // handleSvgIcon(config);
 
     if (isProd) {
       compressImage(config);
@@ -146,7 +151,9 @@ module.exports = defineConfig({
           '#': resolve('./types'),
         },
       },
-      plugins: [],
+      plugins: [
+        // sourceMapPlugin()
+      ],
     };
     if (isProd) {
       config.plugins.push(openGzip());

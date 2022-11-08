@@ -1,16 +1,30 @@
 <template>
-  <div class="space-x-4 about"> About </div>
+  <div>
+    <h1 class="font-bold text-2xl">About {{ count }}</h1>
+    <a-button @click="handleAdd">+1</a-button>
+  </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue';
-
-  export default defineComponent({
+<script>
+  export default {
     name: 'AboutView',
-    setup() {
-      return {};
+    data() {
+      return {
+        count: 1,
+      };
     },
-  });
+    watch: {
+      count(value) {
+        console.log(value);
+        console.log(value + 2);
+      },
+    },
+    methods: {
+      handleAdd() {
+        // eslint-disable-next-line no-debugger
+        debugger;
+        this.count++;
+      },
+    },
+  };
 </script>
-
-<style></style>

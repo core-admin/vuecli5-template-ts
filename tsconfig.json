@@ -37,7 +37,7 @@
     "skipLibCheck": true,
     // 移除注释
     "removeComments": true,
-    "types": ["node"],
+    "types": ["node", "webpack-env"],
     "typeRoots": ["./node_modules/@types/", "./types"],
     "paths": {
       "@/*": ["src/*"],
@@ -61,5 +61,5 @@
     "mock/**/*.ts"
   ],
   // 不需要被检查的文件
-  "exclude": ["**/node_modules/**", "**/dist/**", "**/*.js"]
+  "exclude": ["**/node_modules/**", "**/dist/**"]
 }

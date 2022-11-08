@@ -1,0 +1,73 @@
+{
+  "configurations": [
+    {
+      "name": "Launch Chrome",
+      "type": "chrome",
+      "request": "launch",
+
+      "userDataDir": false,
+      "runtimeExecutable": "canary",
+
+      // "runtimeExecutable": "C:\\chrome-old\\chrome96\\Chrome-bin\\chrome.exe",
+      // "userDataDir": "C:\\chrome-old\\chrome96\\user-data",
+
+      // "runtimeExecutable": "C:\\chrome-old\\chrome_canary_103\\Chrome-bin\\chrome.exe",
+      // "userDataDir": "C:\\chrome-old\\chrome_canary_103\\user-data",
+
+      "url": "http://localhost:9100",
+      "webRoot": "${workspaceFolder}",
+
+      // "runtimeArgs": ["--auto-open-devtools-for-tabs"],
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        // "meteor://💻app/*": "${workspaceFolder}/*",
+        // "webpack:///./~/*": "${workspaceFolder}/node_modules/*",
+        "webpack://?:*/*": "${workspaceFolder}/*"
+
+        // "webpack://vuecli5-vue3-ts/src/*": "${workspaceFolder}/src/*"
+      }
+
+      // "sourceMapPathOverrides": {
+      //   "webpack://src/*": "${webRoot}/src/*",
+      //   "src://src/*": "${webRoot}/src/*"
+      // }
+
+      // "sourceMapPathOverrides": {
+      //   "webpack://<name-from-package.json>/./src/*": "${webRoot}/src/*"
+      // }
+
+      // "sourceMapPathOverrides": {
+      //   "webpack:///./src/*": "${webRoot}/src/*"
+      // }
+
+      // "sourceMapPathOverrides": {
+      //   "webpack://vuecli5-template-cli/src/*": "${webRoot}/src/*"
+      // }
+    }
+  ]
+}
+
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "type": "chrome",
+//       "request": "launch",
+//       "name": "My VueJS Chrome",
+//       "runtimeExecutable": "canary",
+//       "url": "http://localhost:9100",
+//       "webRoot": "${workspaceFolder}",
+//       "preLaunchTask": "serve"
+//       // "userDataDir": "${env:HOME}/.vscode/vscode-chrome-debug-userdatadir"
+//       // This config is to always use the same configuration for the chrome app (system wide)
+//       // therefore you can install the prefered extensions once and they will stay!
+//       // Taken from here: https://stackoverflow.com/questions/51725854/run-vscode-chrome-debugger-with-its-extensions
+//     }
+//   ]
+// }
+
+// vue3 项目调试问题帖子：
+// https://github.com/vuejs/vue-cli/issues/6479
+// https://github.com/vuejs/vue/issues/11023
+// https://ckhconsulting.com/vue-typescript-debuggers/
+// https://github.com/vuejs/vue-cli/issues/6030
