@@ -1,5 +1,5 @@
 import type { FunctionArgs } from '@vueuse/core';
-import { upperFirst } from './is';
+import { upperFirst } from '../index';
 
 export interface ViewportOffsetResult {
   left: number;

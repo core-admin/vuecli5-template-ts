@@ -1,9 +1,9 @@
 import { isUndefined, isNull } from 'lodash-es';
-export { NOOP, isFunction, isString, isArray, isMap } from '@vue/shared';
+export { isFunction, isString, isArray, isMap } from '@vue/shared';
 
 export { isClient, isWindow } from '@vueuse/core';
 
-export { isNull, isEmpty, isNumber, isBoolean, isEqual, isUndefined, upperFirst } from 'lodash-es';
+export { isNull, isEmpty, isNumber, isBoolean, isEqual, isUndefined } from 'lodash-es';
 
 export const is = (val: unknown, type: string): boolean => {
   return toString.call(val) === `[object ${type}]`;

@@ -13,14 +13,7 @@ function resolve(dir) {
   return path.join(__dirname, './', dir);
 }
 
-const isReport = process.argv.includes('--report');
-
-// 预览打包后的文件大小与分布
-function previewBuild() {
-  const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-  return new BundleAnalyzerPlugin();
-}
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function openGzip() {
   const CompressionWebpackPlugin = require('compression-webpack-plugin');
   return new CompressionWebpackPlugin({
@@ -33,6 +26,7 @@ function openGzip() {
   });
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function compressImage(config) {
   config.module
     .rule('images')
@@ -92,7 +86,7 @@ const handleSvgIcon = config => {
 };
 
 module.exports = defineConfig({
-  filenameHashing: false,
+  filenameHashing: true,
   publicPath: isProd ? process.env.VUE_APP_PUBLIC_PATH : '/',
   // node_modules里面的文件不会经过babel再编译一遍
   // 是否需要在打包兼容一遍
@@ -111,7 +105,7 @@ module.exports = defineConfig({
   css: {
     // https://github.com/vuejs/vue-cli/issues/5989
     // 是否分离css true:分离css，会造成css无法热更新，false：会把css打包进js中，js一更新css自然更新
-    extract: process.env.NODE_ENV !== 'development',
+    extract: isProd,
     sourceMap: false,
     loaderOptions: {
       less: {
@@ -129,10 +123,10 @@ module.exports = defineConfig({
     // // 修复HMR (热更新不起作用可开启)
     // config.resolve.symlinks(true);
 
-    // handleSvgIcon(config);
+    handleSvgIcon(config);
 
     if (isProd) {
-      compressImage(config);
+      // compressImage(config);
       config.optimization.minimize(true);
     } else {
       config.devtool('source-map');
@@ -156,11 +150,7 @@ module.exports = defineConfig({
       ],
     };
     if (isProd) {
-      config.plugins.push(openGzip());
-
-      if (isReport) {
-        config.plugins.push(previewBuild());
-      }
+      // config.plugins.push(openGzip());
 
       config.optimization = {
         // https://webpack.docschina.org/configuration/optimization/#optimizationruntimechunk
@@ -168,58 +158,50 @@ module.exports = defineConfig({
           name: 'manifest',
         },
         splitChunks: {
+          minSize: 100 * 1000, // 大小超过30kb的模块才会被提取
+          maxSize: 0, // 只是提示，可以被违反，会尽量将chunk分的比maxSize小，当设为0代表能分则分，分不了不会强制
+          maxAsyncRequests: 5, // 分割后，按需加载的代码块最多允许的并行请求数，在webpack5里默认值变为6
+          maxInitialRequests: 3, // 分割后，入口代码块最多允许的并行请求数，在webpack5里默认值变为4
           cacheGroups: {
-            libs: {
-              name: 'chunk-vendor',
-              chunks: 'initial',
-              minChunks: 1,
+            // 禁用默认缓存组
+            default: false,
+            dll: {
+              name: 'dll-chunk',
+              chunks: 'all',
               test: /[\\/]node_modules[\\/]/,
-              priority: 1,
+              priority: -1,
               reuseExistingChunk: true,
-              enforce: true,
             },
             common: {
-              name: 'chunk-common',
-              chunks: 'initial',
-              minChunks: 2,
-              maxInitialRequests: 5,
-              minSize: 0,
-              priority: 2,
+              name: 'common-chunk',
+              chunks: 'all',
               reuseExistingChunk: true,
-              enforce: true,
+              // enforce: true,
             },
             lib: {
-              name: 'chunk-lib',
+              name: 'lib-chunk',
               chunks: 'all',
-              minChunks: 1,
               test: /[\\/]node_modules[\\/](axios|lodash-es|qs|dayjs|@ant-design\/colors)[\\/]/,
               priority: 3,
               reuseExistingChunk: true,
-              enforce: true,
+              // enforce: true,
             },
-            awesomeVue: {
-              name: 'awesome-vue',
-              test: /[\\/]node_modules[\\/](vue|vue-router|pinia|@vueuse\/core|@vue\/shared)[\\/]/,
+            'vue-lib': {
+              name: 'vue-lib-chunk',
+              test: /[\\/]node_modules[\\/](vue-router|pinia|@vueuse\/core|@vue\/shared)[\\/]/,
               chunks: 'all',
               priority: 3,
               reuseExistingChunk: true,
               enforce: true,
             },
-            // awesomeVueComponent: {
-            //   name: 'awesome-vue-component',
-            //   test: /[\\/]node_modules[\\/](qrcodejs2-fix|v-contextmenu|vue-cropper)[\\/]/,
-            //   chunks: 'all',
-            //   priority: 3,
-            //   reuseExistingChunk: true,
-            //   enforce: true,
-            // },
             antv: {
-              name: 'chunk-antv',
-              test: /[\\/]node_modules[\\/]ant-design-vue[\\/]/,
+              name: 'antv-chunk',
+              test: /[\\/]node_modules[\\/](ant-design-vue|@ant-design-vue\/icons-vue)[\\/]/,
               chunks: 'all',
               priority: 3,
               reuseExistingChunk: true,
               enforce: true,
+              // minSize: 300 * 1000,
             },
           },
         },
