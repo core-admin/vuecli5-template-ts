@@ -15,6 +15,8 @@ function resolve(dir) {
 
 const isReport = process.argv.includes('--report');
 
+// aaa
+
 // 预览打包后的文件大小与分布
 function previewBuild() {
   const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;

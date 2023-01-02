@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "bootstrap": "pnpm install",
+    "commit": "czg",
     "serve:dev": "cross-env NODE_ENV=development vue-cli-service serve",
     "serve:test": "cross-env NODE_ENV=development vue-cli-service serve --mode=test",
     "serve:preview": "cross-env NODE_ENV=development vue-cli-service serve --mode=preview",
@@ -16,6 +17,7 @@
     "log": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "lint:eslint": "eslint --cache --max-warnings 0  \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
     "lint:prettier": "prettier --write  \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
+    "type:check": "vue-tsc --noEmit --skipLibCheck",
     "lint:lint-staged": "lint-staged",
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
@@ -60,6 +62,8 @@
     "compression-webpack-plugin": "^9.2.0",
     "conventional-changelog-cli": "^2.2.2",
     "cross-env": "^7.0.3",
+    "cz-git": "^1.4.1",
+    "czg": "^1.4.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -108,5 +112,10 @@
     "*.md": [
       "prettier --write"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-git"
+    }
   }
 }

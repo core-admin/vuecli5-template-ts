@@ -4,6 +4,7 @@
 
 [ -n "$CI" ] && exit 0
 
+PATH="/usr/local/bin:$PATH"
+
 # Format and submit code according to lintstagedrc.js configuration
-pnpm exec lint-staged
-pnpm exec pretty-quick --staged
+npm run lint:lint-staged
