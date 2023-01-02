@@ -1,209 +1,39 @@
-# 依赖安装
+# 项目说明
 
-# 代码提交规范
+基于 vuecli5（webpack5）+ vue3 + typescript + vue-router + pinia + eslint + prettier + commitlint 构建的一套项目模板。
 
-## commitizen
+## UI 框架
 
-<!-- https://www.cnblogs.com/Yellow-ice/p/15353900.html -->
+UI 框架需要注意的地方时，此模板使用了 `ant-design-vue`作为基础 UI 框架，如何更换先请自行更换，后续抽出时间会更换成公司统一用的 UI 框架。
 
-`commitizen`是一个 cli 工具，用于规范 git commit 信息，可以代替 git commit
+辅助的 UI 框架，使用了 tailwindcss 框架，它以原子化的方式提供了我们开发时常用的样式，以类名的方式进行使用，css 的生产为增量生成，生成文件的大小取决于在项目与用到的类名种类的多少，具体使用方式请参照[文档](https://tailwindcss.com/)。
 
-## Conventional Commits 规范定义的 Type 类型
+## 代码提交
 
-| Type     | Description                                              |
-| -------- | -------------------------------------------------------- |
-| feat     | 新增 feature                                             |
-| fix      | 修复 bug                                                 |
-| docs     | 仅仅修改了文档，比如：README、CHANGELOG、CONTRIBUTE 等等 |
-| style    | 仅仅修改了空格、格式缩进、逗号等等，不改变代码逻辑       |
-| refactor | 代码重构，没有加新功能或者修复 bug                       |
-| perf     | 优化代码方面，比如提升性能、体验                         |
-| test     | 测试用例，包括单元测试、集成测试等                       |
-| chore    | 改变构建流程、或者增加依赖库、工具等                     |
+代码提交遵循 [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) 提交规范，规范的限制在 `.commitlintrc.js` 文件中。
 
-安装 commitizen
-
-`pnpm i commitizen -D`
-
-安装 conventional-changelog-cli 生成提交日志 从 git metadata 生成变更日志
-
-`npx i conventional-changelog-cli -D`
-
-## 安装 lint-staged
-
-Lint-staged 可以在 git staged 阶段的文件上执行 Linters，简单说就是当我们运行 ESlint 或 Stylelint 命令时，可以通过设置指定只检查我们通过 git add 添加到暂存区的文件，可以避免我们每次检查都把整个项目的代码都检查一遍，从而提高效率。
-
-其次，Lint-staged 允许指定不同类型后缀文件执行不同指令的操作，并且可以按步骤再额外执行一些其它 shell 指令。
-
-安装依赖
-
-`pnpm i @commitlint/cli @commitlint/config-conventional -D`
-
-**新版 husky 的工作原理**
-
-新版的 husky 使用了从 git 2.9 开始引入的一个新功能 core.hooksPath。core.hooksPath 可以让你指定 git hooks 所在的目录而不是使用默认的.git/hooks/。这样 husky 可以使用 husky install 将 git hooks 的目录指定为.husky/，然后使用 husky add 命令向.husky/中添加 hook。通过这种方式我们就可以只添加我们需要的 git hook，而且所有的脚本都保存在了一个地方（.husky/目录下）因此也就不存在同步文件的问题了。
-
-1. 安装 husky
-
-`pnpm i husky -D`
-
-2. 在 packgae.json 中添加 prepare 脚本
-
-```javascript
-{
-  "scripts": {
-    "prepare": "husky install"
-  }
-}
-
-```
-
-prepare 脚本会在 pnpm install（不带参数）之后自动执行。也就是说当我们执行 pnpm install 安装完项目依赖后会执行 husky install 命令，该命令会创建.husky/目录并指定该目录为 git hooks 所在的目录。
-
-此命令如果不执行，git commit 钩子将不存在也就不会触发 commit 校验
-
-## only-allow
-
-only-allow 来规范团队的包管理工具
-
-以我当前所在的项目组为例，有四个前端开发工程师。每个人在安装依赖的时候方式不一，我习惯用 cnpm install，别人习惯用 yarn install 或 npm install。这样的场景下，可能存在每个人所处的开发环境的依赖包不同。因此，可以试图用工具去规范团队： only-allow 。
-
-只需在 package.json 中加入一行代码来限制，如下含义：只允许使用 npm 来进行安装
-
-npx only-allow [method]（method 可取值：npm | yarn | pnpm）
-
-```javascript
-{
-  "scripts": {
-    // ... 其他命令
-    "preinstall": "npx only-allow pnpm" // 使用pnpm作为包管理工具
- }
-}
-```
-
-preinstall 是包安装工具的 钩子函数，在上例中作为 install 之前的拦截判断
-
-其他钩子如下：
+代码提交时，会触发 `git` 的 `pre-commit` 钩子，此钩子的作用实在你提交代码时，会处理你缓存区的代码，具体会执行以下脚本：
 
 ```shell
-# install 之前触发
-preinstall
-
-install
-
-# install 之后触发
-postinstall
+npm run lint # 使用 vue-cli-service lint 校验与更正代码
+npm run type:check # 使用 vue-tsc 检测项目代码中的的类型是否正确
+pnpm exec lint-staged # lint-staged 触发对应的校验规则，配置文件为 lint-staged.config
 ```
 
-当配置了当前项目只能通过 pnpm 来安装依赖时，如使用`yarn install`来进行安装，终端会报错。并终止安装进程，应使用`pnpm install`来安装本项目的依赖
+以上脚本跑完，会校验你提交的信息是否符合 `Conventional Commits` 规范，提交信息不规范，将拒绝提交。
 
-至此，便达到规范一个项目内使用相同包管理工具的目标
+你可以使用一下命令：`echo "test: a" | npx commitlint` 来检测本次提交的 `commit message` 信息是否可以通过。
 
-<!-- "postinstall": "node ./scripts/prepare.js" -->
+`"test: a"` 为提交的信息。
 
-# 项目优化
+## svg-icon 组件
 
-## vuecli 的预加载
+`src/components/SvgIcon` 组件可将 `src/assets/icons/svg-icons/*.svg` 文件作为 icon 图标使用，它与 `src/components/SvgFilIcon` 组件的区别是，前者会去除 svg 的默认颜色等属性，可自定义颜色，而后者主要是用来加载多色 svg 图标用的，后期加载的文件是 `src/assets/icons/svg-fill-icons/*.svg`。
 
-### 删除预加载
+当 UI 提供的图标是一个彩色图标时，可将 svg 文件文件放入`src/assets/icons/svg-fill-icons`目录下，使用`SvgFilIcon`组件进行加载。
 
-vuecli 的预加载功能是默认开启的。
+## 补充
 
-```javascript
-module.exports = {
-  chainWebpack(config) {
-    // 移除 prefetch 插件
-    // prefetch 加载其他页面资源，空闲时加载，不一定会加载
-    config.plugins.delete('prefetch');
-    // 删除文件预加载
-    // preload 加载当前页面的资源，一定会加载，在渲染前加载
-    config.plugins.delete('preload');
-  },
-};
-```
+对于此模板的使用问题以及功能需求，请提交 issues，提交 issues 的好处是方便别人能根据已提交的 issues 定位问题是否已经提交或者解决，方便留痕与查阅。
 
-### prefetch，preload 使用的必要性
-
-prefetch 预加载是不会影响当前页面的加载性能的，因此预加载是可以被保留的，什么情况下我们需要禁用预加载呢？对流量损耗敏感（移动端）的应用场景，在首页对子页面进行全面的预加载，而用户可能只需要跳转其中的一两个子页面甚至停留在首页，造成大量的流量浪费。需要做到控制特定的路由预加载。首先，先移除 prefetch 插件，然后按需添加预加载。
-
-```javascript
-import(/* webpackPrefetch: true */ './componentA.vue');
-```
-
-preload 用于提高资源加载的优先级，当页面开始加载时，我们总是想核心的代码或资源得到优先处理，因此可以通过 preloading 提高优先级。
-
-```javascript
-import(/* webpackPreload: true */ 'lbrary');
-```
-
-错误的使用 webpackPreload 实际上会影响性能，因此要谨慎使用。
-
-如果把一个体积巨大的资源放在最高优先级加载，页面可能会长时间空白，用户体验体验非常差，因此，慎用。
-
-优化点：懒加载优化了首屏加载的速率，prefetch 预加载优化了子页面加载的速率
-
-### 打包预览文件大小
-
-安装插件 `pnpm i webpack-bundle-analyzer -D`
-
-### moment 优化
-
-如果项目中用到了 moment 这个库，打包出来的文件会比较大，可通过以下方式进行优化，排除比重比较大的 moment 库中的多语言文件。
-
-```javascript
-const webpack = require('webpack');
-
-module.exports = {
-  chainWebpack: config => {
-    config
-      .plugin('ignore')
-      .use(new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn$/));
-
-    return config;
-  },
-};
-```
-
-### babel
-
-1. 使用 `babel-plugin-import` 插件，支持 ant-design-vue 按需引入；
-
-2. 使用 `@vue/babel-plugin-jsx` 插件，让 vue 支持 jsx；
-
-3. 使用 `@babel/plugin-proposal-optional-chaining` 插件，让浏览器支持实验阶段的 es 可选链 新语法
-
-4. 使用 `@babel/plugin-proposal-nullish-coalescing-operator` 插件，让浏览器支持实验阶段的 es 零合并操作符
-
-### script 命令
-
-```json5
-{
-  scripts: {
-    // 初始化项目 安装依赖
-    bootstrap: 'pnpm install',
-    // 启动项目
-    dev: 'pnpm run serve',
-    serve: 'vue-cli-service serve',
-    // 测试环境打包
-    'build:test': 'vue-cli-service build --mode=test',
-    // 预发环境打包
-    'build:preview': 'vue-cli-service build --mode=test preview',
-    // 生产环境打包
-    'build:production': 'vue-cli-service build',
-    // 打包查看项目各个包资源的分布于大小
-    'build:test:report': 'vue-cli-service build --mode=test --report',
-    // 格式化项目代码
-    lint: 'vue-cli-service lint',
-    log: 'conventional-changelog -p angular -i CHANGELOG.md -s',
-    'lint:eslint': 'eslint --cache --max-warnings 0  "{src,mock}/**/*.{vue,ts,tsx}" --fix',
-    'lint:prettier': 'prettier --write  "src/**/*.{js,json,tsx,css,less,scss,vue,html,md}"',
-    'lint:lint-staged': 'lint-staged',
-    // 限制项目的依赖安装通过 pnpm 来下载和管理
-    preinstall: 'npx only-allow pnpm',
-    // 安装 husky 工具
-    prepare: 'husky install',
-  },
-}
-```
-
-1
+## 后续内容待补充。。。
