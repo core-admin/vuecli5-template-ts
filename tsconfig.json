@@ -20,6 +20,7 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "removeComments": true,
+    "incremental": true,
     "types": [
       "node",
       "webpack-env"
