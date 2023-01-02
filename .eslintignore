@@ -13,3 +13,6 @@ dist
 /bin
 /src/lib
 Dockerfile
+
+
+tsconfig.tsbuildinfo

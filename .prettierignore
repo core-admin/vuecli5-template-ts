@@ -2,9 +2,7 @@
 .output.js
 .husky
 .idea
-.npmrc
-jsconfig.json
-tsconfig.json
+tsconfig.tsbuildinfo
 
 **/*.svg
 **/*.sh
