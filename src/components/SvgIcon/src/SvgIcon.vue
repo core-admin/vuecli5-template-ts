@@ -1,25 +1,21 @@
 <template>
-  <span :class="['custom-svg-icon', wrapperClass]" :style="computedStyle">
+  <span :class="['svg-icon', wrapperClass]" :style="computedStyle">
     <svg :class="svgClass" aria-hidden="true">
       <use :xlink:href="iconName" />
     </svg>
   </span>
 </template>
 
-<script>
+<script lang="ts">
   import { defineComponent, computed } from 'vue';
-
-  // // eslint-disable-next-line no-undef
-  const importAll = requireContext => requireContext.keys().forEach(requireContext);
-  try {
-    importAll(require.context('@/assets/svg-icons', true, /\.svg$/));
-  } catch (error) {
-    console.log('svgIcon error >>> ', error);
-  }
 
   export default defineComponent({
     name: 'SvgIcon',
     props: {
+      prefixId: {
+        type: String,
+        default: 'svg-icon',
+      },
       name: {
         type: String,
         required: true,
@@ -38,7 +34,7 @@
     },
     setup(props) {
       return {
-        iconName: computed(() => `#custom-icon-${props.name}`),
+        iconName: computed(() => `#${props.prefixId}-${props.name}`),
         computedStyle: computed(() => {
           const { width, height, style = {} } = props;
           const base = {
@@ -55,8 +51,8 @@
   });
 </script>
 
-<style lang="scss">
-  .custom-svg-icon {
+<style lang="less">
+  .svg-icon {
     display: inline-block;
     color: inherit;
     font-style: normal;
