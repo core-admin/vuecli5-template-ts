@@ -29,6 +29,7 @@
     computed,
     unref,
   } from 'vue';
+  import type { CSSProperties } from 'vue';
   import Bar from './bar';
 
   export default defineComponent({
@@ -120,7 +121,7 @@
         moveY,
         sizeWidth,
         sizeHeight,
-        style,
+        style: style as unknown as CSSProperties,
         wrap,
         resize,
         update,

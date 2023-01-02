@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia';
 import { pinia } from '@/internal/pinia';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface AppState {}
-
-// const ll = localStorage;
+interface AppState {
+  title: string;
+}
 
 export const useAppStore = defineStore({
   id: 'app-store',
-  state: (): AppState => ({}),
-  getters: {},
+  state: (): AppState => ({
+    title: 'app',
+  }),
   actions: {},
 });
 

@@ -4,7 +4,7 @@ interface EnvGlobConfig {
   VUE_APP_SHORT_NAME: string;
   VUE_APP_PORT: number;
   NODE_ENV: 'development' | 'production';
-  VUE_APP_NODE_MODE: 'dev' | 'pro' | 'test';
+  VUE_APP_NODE_MODE: 'development' | 'test' | 'preview' | 'production';
   VUE_APP_PROXY?: string;
   VUE_APP_GLOB_API_URL: string;
   VUE_APP_GLOB_UPLOAD_URL?: string;

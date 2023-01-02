@@ -1,7 +1,6 @@
 const path = require('path');
 const { defineConfig } = require('@vue/cli-service');
 const { wrapperEnv, getAppEnvConfig, createProxy } = require('./build/env');
-// const sourceMapPlugin = require('./build/plugins/source-map');
 
 const env = getAppEnvConfig();
 const vueEnv = wrapperEnv(env);
@@ -51,46 +50,53 @@ function compressImage(config) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const handleSvgIcon = config => {
-  config.module.rule('svg').exclude.add(resolve('src/assets/svg-icons')).end();
-
-  config.module
-    .rule('icons')
-    .test(/\.svg$/)
-    .include.add(resolve('src/assets/svg-icons'))
-    .end()
-    .use('svg-sprite-loader')
-    .loader('svg-sprite-loader')
-    .options({
-      symbolId: 'custom-icon-[name]',
-    })
-    .end()
-    .before('svg-sprite-loader')
-    .use('svgo-loader')
-    .loader('svgo-loader')
-    // 对 svg sprite的一些设置 -> svgo
-    .options({
-      plugins: [
-        {
-          name: 'preset-default',
-          params: {
-            // 覆写默认插件配置
-            overrides: {},
-          },
-        },
-        {
-          name: 'removeAttrs',
-          params: {
-            attrs: '(fill|fill-rule|clip-rule)',
-          },
-        },
-        {
-          name: 'addAttributesToSVGElement',
-          params: {
-            attributes: [{ fill: 'currentColor' }],
-          },
-        },
-      ],
-    });
+  function initSvgIcon(path, ruleName = 'icons', symbolId, svgo = false) {
+    config.module.rule('svg').exclude.add(resolve(path)).end();
+    const module = config.module
+      .rule(ruleName)
+      .test(/\.svg$/)
+      .include.add(resolve(path))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: `${symbolId}-[name]`,
+      })
+      .end();
+    // 去除svg icon默认属性
+    if (svgo) {
+      module
+        .before('svg-sprite-loader')
+        .use('svgo-loader')
+        .loader('svgo-loader')
+        // 对 svg sprite的一些设置 -> svgo
+        .options({
+          plugins: [
+            {
+              name: 'preset-default',
+              params: {
+                // 覆写默认插件配置
+                overrides: {},
+              },
+            },
+            {
+              name: 'removeAttrs',
+              params: {
+                attrs: '(fill|fill-rule|clip-rule)',
+              },
+            },
+            {
+              name: 'addAttributesToSVGElement',
+              params: {
+                attributes: [{ fill: 'currentColor' }],
+              },
+            },
+          ],
+        });
+    }
+  }
+  initSvgIcon('./src/assets/icons/svg-icons', 'svg-icons', 'svg-icon', true);
+  initSvgIcon('./src/assets/icons/svg-fill-icons', 'svg-fill-icons', 'svg-fill-icon', false);
 };
 
 module.exports = defineConfig({
@@ -131,7 +137,7 @@ module.exports = defineConfig({
     // // 修复HMR (热更新不起作用可开启)
     // config.resolve.symlinks(true);
 
-    // handleSvgIcon(config);
+    handleSvgIcon(config);
 
     if (isProd) {
       compressImage(config);
@@ -207,14 +213,6 @@ module.exports = defineConfig({
               reuseExistingChunk: true,
               enforce: true,
             },
-            // awesomeVueComponent: {
-            //   name: 'awesome-vue-component',
-            //   test: /[\\/]node_modules[\\/](qrcodejs2-fix|v-contextmenu|vue-cropper)[\\/]/,
-            //   chunks: 'all',
-            //   priority: 3,
-            //   reuseExistingChunk: true,
-            //   enforce: true,
-            // },
             antv: {
               name: 'chunk-antv',
               test: /[\\/]node_modules[\\/]ant-design-vue[\\/]/,
@@ -229,5 +227,4 @@ module.exports = defineConfig({
     }
     return config;
   },
-  pluginOptions: {},
 });
